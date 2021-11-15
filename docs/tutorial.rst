@@ -5,6 +5,8 @@ Tutorial
 **mdpo** provides flexible ways for doing Markdown markup translations. In this
 tutorial are covered the most common workflows.
 
+mdpo uses **PO files** as an 'intermediary'. These files will be updated with translations, with usually (at least) one PO file per language.
+
 .. raw:: html
 
    <hr>
@@ -32,13 +34,19 @@ Use the next command to create or update the PO file for ``README.md``:
 
    md2po README.md --quiet --save --po-filepath locale/es/LC_MESSAGES/readme.po
 
+Note that if the PO file does not exist yet, it will not be created automatically. If the ``--save`` argument is used a PO file will be created, without defined encoding. (You can define the encoding of the output using the ``--po-encoding`` argument.) This behaviour is intended to ensure new PO files are created (manually) with the necessary metadata (encoding, in particular). This metadata can be stored in the *Header Entry*; the first message in the file, which never is translated. In addition to the encoding ('Content-Type') it can define the language in the file, project and translator information, and a plural definition of the file ([specifications](https://www.gnu.org/software/gettext/manual/html_node/Header-Entry.html).
 
-Then, in order of translate the ``README.md`` producing other file as result:
+Then, after the PO file has been updated to include the translations, use the next command to create the localised ``README.md`` (produce a translated MD file):
 
 .. code-block:: bash
 
-   po2md README.md --pofiles locale/es/LC_MESSAGES/readme.po --quiet \
+   po2md README.md --po-files locale/es/LC_MESSAGES/readme.po --quiet \
      --save locale/es/LC_MESSAGES/README.md
+
+Here
+* ``README.md`` is the 'positional argument'; the markdown filepath or content to translate (content in the source language)
+* ``--po-files`` (which can can be followed by multiple paths) determines from where the translations are pulled, which are then used to replace the strings in the localised MD file.
+* ``--save`` is the markdown file that will be created, using the translations from the PO files
 
 This will be the output after previous two commands:
 
